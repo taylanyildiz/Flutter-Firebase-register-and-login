@@ -12,8 +12,13 @@ Stream provider usage.
 
 To use this package :
 
-* add the dependency to your [pubspec.yaml](https://github.com/taylanyildiz/date_time_picker_tr/blob/main/pubspec.yaml) file.
-
+* add the dependency to your [pubspec.yaml](https://github.com/taylanyildiz/Flutter-Firebase-sign-log/blob/master/pubspec.yaml) file.
+```yaml
+  provider: ^5.0.0
+  firebase_core: ^1.1.0
+  cloud_firestore: ^2.0.0
+  firebase_auth: ^1.1.3
+```
 * paste it in the specified path
 android\app\build.gradle
 
