@@ -1,0 +1,136 @@
+import 'package:flutter/material.dart';
+import '../widgets/widget.dart';
+
+class _Scope extends InheritedWidget {
+  _Scope({
+    Key? key,
+    required Widget child,
+    required this.state,
+  }) : super(key: key, child: child);
+
+  final _WelcomeScreenState state;
+
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) =>
+      (oldWidget as _Scope).state != state;
+}
+
+class WelcomeScreen extends StatefulWidget {
+  WelcomeScreen({
+    Key? key,
+    this.title,
+  }) : super(key: key);
+
+  final String? title;
+
+  static _WelcomeScreenState of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_Scope>()!.state;
+
+  @override
+  _WelcomeScreenState createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 0; i < 4; i++) {
+      _nodes.add(FocusNode());
+      if (i < 2) {
+        _formkeys.add(GlobalKey<FormState>());
+      }
+      _textController.add(TextEditingController());
+    }
+    _pageController = PageController(initialPage: 0);
+  }
+
+  PageController? _pageController;
+  final _nodes = <FocusNode>[];
+  final _formkeys = <GlobalKey<FormState>>[];
+  final _textController = <TextEditingController>[];
+
+  Future<List<Widget>> _firebase() async {
+    final reg = <Widget>[];
+    reg.add(
+      SignIn(
+        formKeys: _formkeys[0],
+        textControllers: [
+          _textController[0],
+          _textController[1],
+        ],
+        nodes: [
+          _nodes[0],
+          _nodes[1],
+        ],
+      ),
+    );
+    reg.add(
+      LogIn(
+        formKeys: _formkeys[1],
+        textControllers: [
+          _textController[2],
+          _textController[3],
+        ],
+        nodes: [
+          _nodes[2],
+          _nodes[3],
+        ],
+      ),
+    );
+    return reg;
+  }
+
+  int currentPage = 0;
+
+  void onBack() {
+    currentPage--;
+
+    _pageController!.animateToPage(
+      currentPage,
+      duration: Duration(seconds: 1),
+      curve: Curves.linear,
+    );
+  }
+
+  void jumpLogin() {
+    _pageController!.animateToPage(
+      1,
+      duration: Duration(seconds: 1),
+      curve: Curves.linear,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _Scope(
+      state: this,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            FutureBuilder<List<Widget>>(
+              future: _firebase(),
+              builder: (context, snapshots) {
+                if (snapshots.hasData) {
+                  final data = snapshots.data;
+                  return PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: (page) => currentPage = page,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: data!.length,
+                    itemBuilder: (context, index) {
+                      FocusScope.of(context)
+                          .requestFocus(_nodes[index == 0 ? 0 : index + 1]);
+                      return data[index];
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
