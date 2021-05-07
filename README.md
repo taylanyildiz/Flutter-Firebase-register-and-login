@@ -1,6 +1,6 @@
 # flutter_fire_base_register
 
-How log in firebase sign in and log out Textformfield with focusNode.
+How login, register and log out Firebase. Textformfield with focusNode InheritedWidget exam.
 Stream provider usage.
 
 ###
