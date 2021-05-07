@@ -44,47 +44,40 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _pageController = PageController(initialPage: 0);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController!.dispose();
+    for (var i = 0; i < 4; i++) {
+      _nodes[i].dispose();
+      _textController[i].dispose();
+    }
+  }
+
   PageController? _pageController;
   final _nodes = <FocusNode>[];
   final _formkeys = <GlobalKey<FormState>>[];
   final _textController = <TextEditingController>[];
 
   Future<List<Widget>> _firebase() async {
-    final reg = <Widget>[];
-    reg.add(
+    return <Widget>[
       SignIn(
         formKeys: _formkeys[0],
-        textControllers: [
-          _textController[0],
-          _textController[1],
-        ],
-        nodes: [
-          _nodes[0],
-          _nodes[1],
-        ],
+        textControllers: [_textController[0], _textController[1]],
+        nodes: [_nodes[0], _nodes[1]],
       ),
-    );
-    reg.add(
-      LogIn(
+      Register(
         formKeys: _formkeys[1],
-        textControllers: [
-          _textController[2],
-          _textController[3],
-        ],
-        nodes: [
-          _nodes[2],
-          _nodes[3],
-        ],
+        textControllers: [_textController[2], _textController[3]],
+        nodes: [_nodes[2], _nodes[3]],
       ),
-    );
-    return reg;
+    ];
   }
 
   int currentPage = 0;
 
   void onBack() {
     currentPage--;
-
     _pageController!.animateToPage(
       currentPage,
       duration: Duration(seconds: 1),

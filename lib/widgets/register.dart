@@ -3,8 +3,8 @@ import 'package:flutter_fire_base_register/auth/auth.dart';
 import 'package:flutter_fire_base_register/screens/screen.dart';
 import 'package:flutter_fire_base_register/widgets/widget.dart';
 
-class LogIn extends StatelessWidget {
-  LogIn({
+class Register extends StatefulWidget {
+  Register({
     Key? key,
     required this.formKeys,
     required this.textControllers,
@@ -15,19 +15,26 @@ class LogIn extends StatelessWidget {
   final List<TextEditingController> textControllers;
   final List<FocusNode> nodes;
 
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
   AuthSerives _serives = AuthSerives();
 
   String? mail;
-  String? password;
-  void logIn(BuildContext context) async {
-    final check = formKeys.currentState!.validate();
 
-    mail = textControllers[0].text;
-    password = textControllers[1].text;
+  String? password;
+
+  void logIn(BuildContext context) async {
+    final check = widget.formKeys.currentState!.validate();
+
+    mail = widget.textControllers[0].text;
+    password = widget.textControllers[1].text;
     if (mail!.isNotEmpty && password!.isNotEmpty) {
-      await _serives.logMailPasword(mail, password);
+      await _serives.registerMailPasword(mail, password);
     } else if (mail!.isNotEmpty && password!.isEmpty) {
-      FocusScope.of(context).requestFocus(nodes[1]);
+      FocusScope.of(context).requestFocus(widget.nodes[1]);
     }
   }
 
@@ -53,10 +60,10 @@ class LogIn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InputWidget(
-              formKey: formKeys,
-              editController: textControllers,
-              itemCount: textControllers.length,
-              nodes: nodes,
+              formKey: widget.formKeys,
+              editController: widget.textControllers,
+              itemCount: widget.textControllers.length,
+              nodes: widget.nodes,
               icons: [
                 Icons.mail,
                 Icons.lock,
@@ -78,7 +85,7 @@ class LogIn extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5.0)),
                 color: Colors.blue,
                 textColor: Colors.white,
-                child: Text('Log In'),
+                child: Text('Register'),
                 onPressed: () => logIn(context),
               ),
             ),
