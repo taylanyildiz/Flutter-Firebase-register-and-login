@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fire_base_register/auth/database.dart';
 import 'package:flutter_fire_base_register/models/data_test.dart';
-import 'package:flutter_fire_base_register/models/user_model.dart';
 import 'package:provider/provider.dart';
 
 class ListWidget extends StatefulWidget {
