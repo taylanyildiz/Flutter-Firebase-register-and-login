@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fire_base_register/auth/auth.dart';
 import 'package:flutter_fire_base_register/auth/database.dart';
 import 'package:flutter_fire_base_register/models/data_test.dart';
 import 'package:flutter_fire_base_register/widgets/list_test.dart';
+import 'package:flutter_fire_base_register/widgets/setting.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +16,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void logOut(BuildContext context) async {
     await _serives.logOut();
+  }
+
+  void _showActionPanel(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+        child: SettingForm(),
+      ),
+    );
   }
 
   @override
@@ -40,6 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.white,
                 ),
               ),
+            ),
+            MaterialButton(
+              onPressed: () => _showActionPanel(context),
+              color: Colors.red,
+              child: Text('Settings'),
+              textColor: Colors.white,
             ),
           ],
         ),
